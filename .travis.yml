@@ -11,5 +11,3 @@ install:
   - pip install Django==$DJANGO --use-mirrors
   - pip install flake8 --use-mirrors
   - pip install -e . --use-mirrors
-script:
-  - make test
