@@ -29,6 +29,7 @@ tests_require = [
     'metlog-py',
     'mock',
     'pep8',
+    'raven',
 ]
 
 setup(name='raven-metlog',
