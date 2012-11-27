@@ -1,0 +1,10 @@
+build
+dist
+_build
+.coverage
+*.pyc
+*.egg
+*.egg-info
+*.swp
+*~
+.ropeproject
