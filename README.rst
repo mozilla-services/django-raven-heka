@@ -1,11 +1,15 @@
-============
-raven-metlog
-============
+===================
+django-raven-metlog
+===================
 
-.. image:: https://secure.travis-ci.org/mozilla-services/raven-metlog.png
+.. image:: https://secure.travis-ci.org/mozilla-services/django-raven-metlog.png
 
-raven-metlog is a set of plugins for the Raven client of Sentry to
-enable routing of raven messages through metlog.
+django-raven-metlog is a set of plugins for the Raven client of Sentry
+to enable routing of raven messages through metlog when you are
+running a Django application.
+
+The primary use of this is to standardize metlog integration into
+`Playdoh <http://playdoh.readthedocs.org/>` applications.
 
 The advantage of doing so allows metlog to act as a centralized client
 to route all logging messages.  This greatly simplifies testing as you

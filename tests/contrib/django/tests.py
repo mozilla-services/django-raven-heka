@@ -3,46 +3,18 @@
 from __future__ import absolute_import
 from __future__ import with_statement
 
-import datetime
-import django
 import logging
-import mock
-import re
-from StringIO import StringIO
 
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.core.signals import got_request_exception
-from django.core.handlers.wsgi import WSGIRequest
-from django.template import TemplateSyntaxError
 from django.test import TestCase
 
-from raven.base import Client
 from raven.contrib.django import DjangoClient
-from raven.contrib.django.handlers import SentryHandler
-from raven.contrib.django.models import client, get_client
-from raven.contrib.django.middleware.wsgi import Sentry
-from raven.contrib.django.views import is_valid_origin
-from raven.utils.serializer import transform
+from raven.contrib.django.models import get_client
 
-from django.test.client import Client as TestClient, ClientHandler as TestClientHandler
-from .models import TestModel
 import json
 
 settings.SENTRY_CLIENT = 'tests.contrib.django.tests.TempStoreClient'
-
-
-class MockClientHandler(TestClientHandler):
-    def __call__(self, environ, start_response=[]):
-        # this pretends doesnt require start_response
-        return super(MockClientHandler, self).__call__(environ)
-
-
-class MockSentryMiddleware(Sentry):
-    def __call__(self, environ, start_response=[]):
-        # this pretends doesnt require start_response
-        return list(super(MockSentryMiddleware, self).__call__(environ, start_response))
 
 
 class TempStoreClient(DjangoClient):
@@ -87,6 +59,7 @@ class Settings(object):
 class DjangoMetlogTransport(TestCase):
     ## Fixture setup/teardown
     urls = 'tests.contrib.django.urls'
+
     def setUp(self):
         """
         This is not entirely obvious.
@@ -116,15 +89,14 @@ class DjangoMetlogTransport(TestCase):
             },
         }
 
-        self.SENTRY_CLIENT = 'raven_metlog.djangometlog.MetlogDjangoClient'
+        self.SENTRY_CLIENT = 'djangoraven.metlog.MetlogDjangoClient'
 
         from metlog.config import client_from_dict_config
         self.METLOG = client_from_dict_config(self.METLOG_CONF)
 
-
     def test_basic(self):
-        with Settings(METLOG_CONF=self.METLOG_CONF, \
-                      METLOG=self.METLOG, \
+        with Settings(METLOG_CONF=self.METLOG_CONF,
+                      METLOG=self.METLOG,
                       SENTRY_CLIENT=self.SENTRY_CLIENT):
 
             self.raven = get_client()
@@ -147,10 +119,9 @@ class DjangoMetlogTransport(TestCase):
             # for datetime, we expect a string
             self.assertTrue(isinstance(event['timestamp'], basestring))
 
-
     def test_signal_integration(self):
-        with Settings(METLOG_CONF=self.METLOG_CONF, \
-                      METLOG=self.METLOG, \
+        with Settings(METLOG_CONF=self.METLOG_CONF,
+                      METLOG=self.METLOG,
                       SENTRY_CLIENT=self.SENTRY_CLIENT):
 
             self.raven = get_client()
