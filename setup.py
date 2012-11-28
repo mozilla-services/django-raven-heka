@@ -18,9 +18,12 @@ from setuptools import setup, find_packages
 
 version = '0.1'
 
-here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'README.rst')) as f:
-    README = f.read()
+README = """
+django-raven-metlog is a set of plugins for the Raven client of Sentry
+to enable routing of raven messages through metlog when you are
+running a Django application.
+"""
+
 
 tests_require = [
     'Django>=1.2,<1.5',
