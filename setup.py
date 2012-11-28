@@ -32,14 +32,14 @@ tests_require = [
     'raven',
 ]
 
-setup(name='raven-metlog',
+setup(name='django-raven-metlog',
       version=version,
-      description="Meltog extensions for Raven",
+      description="Django+Raven+Meltog integration",
       long_description=README,
-      keywords='metlog raven sentry',
+      keywords='django metlog raven sentry',
       author='Victor Ng',
       author_email='vng@mozilla.com',
-      url='https://github.com/mozilla-services/raven-metlog',
+      url='https://github.com/mozilla-services/django-raven-metlog',
       license='MPLv2.0',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
