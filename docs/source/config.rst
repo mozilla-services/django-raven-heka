@@ -68,7 +68,7 @@ Reconfigure Raven to use metlog as it's underlying sentry client. Just
 change the SENTRY_CLIENT setting in settings.py to use the alternate
 SENTRY_CLIENT  ::
 
-    SENTRY_CLIENT = 'djangometlog.raven.MetlogDjangoClient'
+    SENTRY_CLIENT = 'djangoraven.metlog.MetlogDjangoClient'
 
 At this point, you can safely remove the DSN entry in RAVEN_CONFIG.
 The MetlogDjangoClient does not need it.  Final routing of your
