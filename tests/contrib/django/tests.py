@@ -16,6 +16,9 @@ import json
 
 settings.SENTRY_CLIENT = 'tests.contrib.django.tests.TempStoreClient'
 
+TESTING_PROJECT_ID = 2
+DSN = 'udp://1007818f46e44c2f9a03b684dcff87b4:6391e66ef7194b67bd41c23851c7b03a@192.168.20.2:9001/%d'
+DSN = DSN % TESTING_PROJECT_ID
 
 class TempStoreClient(DjangoClient):
     def __init__(self, *args, **kwargs):
@@ -83,10 +86,21 @@ class DjangoMetlogTransport(TestCase):
             * This is the actual metlog client instance
         """
 
+        """
+        'sender': {
+            'class': 'metlog.senders.UdpSender',
+            'host': '192.168.20.2',
+            'port': 5565,
+        },
+        """
         self.METLOG_CONF = {
             'sender': {
                 'class': 'metlog.senders.DebugCaptureSender',
             },
+            'plugins': {'raven':
+                ('metlog_raven.raven_plugin:config_plugin', {'dsn':
+                    DSN})
+             },
         }
 
         self.SENTRY_CLIENT = 'djangoraven.metlog.MetlogDjangoClient'
@@ -97,7 +111,8 @@ class DjangoMetlogTransport(TestCase):
     def test_basic(self):
         with Settings(METLOG_CONF=self.METLOG_CONF,
                       METLOG=self.METLOG,
-                      SENTRY_CLIENT=self.SENTRY_CLIENT):
+                      SENTRY_CLIENT=self.SENTRY_CLIENT,
+                      SENTRY_DSN=DSN):
 
             self.raven = get_client()
 
@@ -114,6 +129,11 @@ class DjangoMetlogTransport(TestCase):
             self.assertEquals(event['level'], logging.ERROR)
             self.assertEquals(event['message'], 'foo')
 
+            # The project_id must be extracted from the SENTRY_DSN
+            # option
+            self.assertEquals(event['project'],
+                    str(TESTING_PROJECT_ID))
+
             # This is different than the regular Django test as we are
             # *decoding* a serialized message - so instead of checking
             # for datetime, we expect a string
@@ -122,7 +142,8 @@ class DjangoMetlogTransport(TestCase):
     def test_signal_integration(self):
         with Settings(METLOG_CONF=self.METLOG_CONF,
                       METLOG=self.METLOG,
-                      SENTRY_CLIENT=self.SENTRY_CLIENT):
+                      SENTRY_CLIENT=self.SENTRY_CLIENT,
+                      SENTRY_DSN=DSN):
 
             self.raven = get_client()
 
@@ -145,3 +166,8 @@ class DjangoMetlogTransport(TestCase):
             self.assertEquals(event['level'], logging.ERROR)
             self.assertEquals(event['message'], u"ValueError: invalid literal for int() with base 10: 'hello'")
             self.assertEquals(event['culprit'], 'tests.contrib.django.tests.test_signal_integration')
+
+            # The project_id must be extracted from the SENTRY_DSN
+            # option
+            self.assertEquals(event['project'],
+                    str(TESTING_PROJECT_ID))
