@@ -15,6 +15,7 @@ from raven.contrib.django.models import get_client
 import json
 
 settings.SENTRY_CLIENT = 'tests.contrib.django.tests.TempStoreClient'
+DSN='udp://1007818f46e44c2f9a03b684dcff87b4:6391e66ef7194b67bd41c23851c7b03a@192.168.20.2:9001/2'
 
 
 class TempStoreClient(DjangoClient):
@@ -85,8 +86,14 @@ class DjangoMetlogTransport(TestCase):
 
         self.METLOG_CONF = {
             'sender': {
-                'class': 'metlog.senders.DebugCaptureSender',
+                'class': 'metlog.senders.UdpSender',
+                'host': '192.168.20.2',
+                'port': 5565,
             },
+            'plugins': {'raven':
+                ('metlog_raven.raven_plugin:config_plugin', {'dsn':
+                    DSN})
+             },
         }
 
         self.SENTRY_CLIENT = 'djangoraven.metlog.MetlogDjangoClient'
@@ -97,7 +104,8 @@ class DjangoMetlogTransport(TestCase):
     def test_basic(self):
         with Settings(METLOG_CONF=self.METLOG_CONF,
                       METLOG=self.METLOG,
-                      SENTRY_CLIENT=self.SENTRY_CLIENT):
+                      SENTRY_CLIENT=self.SENTRY_CLIENT,
+                      SENTRY_DSN=DSN):
 
             self.raven = get_client()
 
@@ -122,7 +130,8 @@ class DjangoMetlogTransport(TestCase):
     def test_signal_integration(self):
         with Settings(METLOG_CONF=self.METLOG_CONF,
                       METLOG=self.METLOG,
-                      SENTRY_CLIENT=self.SENTRY_CLIENT):
+                      SENTRY_CLIENT=self.SENTRY_CLIENT,
+                      SENTRY_DSN=DSN):
 
             self.raven = get_client()
 
