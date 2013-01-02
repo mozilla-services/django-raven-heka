@@ -16,7 +16,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = '0.1'
+version = '0.2'
 
 README = """
 django-raven-metlog is a set of plugins for the Raven client of Sentry
@@ -47,7 +47,7 @@ setup(name='django-raven-metlog',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=['docopt', 'raven'],
+      install_requires=['docopt', 'raven', 'metlog-raven>=0.4'],
       tests_require=tests_require,
       extras_require={'test': tests_require},
       test_suite='runtests.runtests',

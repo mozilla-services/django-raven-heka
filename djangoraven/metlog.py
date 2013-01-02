@@ -28,6 +28,7 @@ class MetlogDjangoClient(DjangoClient):
     This client simply overrides the send_encoded method in the base
     Client so that we use settings.METLOG for transmission
     """
+
     def is_enabled(self):
         return True
 
@@ -40,6 +41,7 @@ class MetlogDjangoClient(DjangoClient):
         raven.base.Client base class which will juse encode and fwd
         the data on to send_encoded.
         """
+
         return Client.send(self, **kwargs)
 
     def send_encoded(self, message, public_key=None, \
@@ -47,7 +49,4 @@ class MetlogDjangoClient(DjangoClient):
         """
         Given an already serialized message send it off to metlog
         """
-        settings.METLOG.metlog(type='sentry',
-                logger='raven.contrib.django.metlog',
-                payload=message,
-                severity=SEVERITY.ERROR)
+        settings.METLOG.raven(payload=message)
