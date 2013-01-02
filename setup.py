@@ -16,7 +16,7 @@
 import os
 from setuptools import setup, find_packages
 
-version = '0.1.1'
+version = '0.2'
 
 README = """
 django-raven-metlog is a set of plugins for the Raven client of Sentry
