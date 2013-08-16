@@ -18,15 +18,15 @@ from raven.contrib.django.client import DjangoClient
 
 try:
     from django.conf import settings
-    from metlog.client import SEVERITY
+    from heka.client import SEVERITY
 except:
     settings = None  # NOQA
     SEVERITY = None  # NOQA
 
-class MetlogDjangoClient(DjangoClient):
+class HekaDjangoClient(DjangoClient):
     """
     This client simply overrides the send_encoded method in the base
-    Client so that we use settings.METLOG for transmission
+    Client so that we use settings.HEKA for transmission
     """
 
     def is_enabled(self):
@@ -47,6 +47,6 @@ class MetlogDjangoClient(DjangoClient):
     def send_encoded(self, message, public_key=None, \
             auth_header=None, **kwargs):
         """
-        Given an already serialized message send it off to metlog
+        Given an already serialized message send it off to heka
         """
-        settings.METLOG.raven(payload=message)
+        settings.HEKA.raven(payload=message)

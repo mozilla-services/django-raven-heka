@@ -19,8 +19,8 @@ from setuptools import setup, find_packages
 version = '0.2'
 
 README = """
-django-raven-metlog is a set of plugins for the Raven client of Sentry
-to enable routing of raven messages through metlog when you are
+django-raven-heka is a set of plugins for the Raven client of Sentry
+to enable routing of raven messages through heka when you are
 running a Django application.
 """
 
@@ -29,25 +29,25 @@ tests_require = [
     'Django>=1.2,<1.5',
     'django-nose',
     'nose',
-    'metlog-py',
+    'heka-py',
     'mock',
     'pep8',
     'raven',
 ]
 
-setup(name='django-raven-metlog',
+setup(name='django-raven-heka',
       version=version,
       description="Django+Raven+Meltog integration",
       long_description=README,
-      keywords='django metlog raven sentry',
+      keywords='django heka raven sentry',
       author='Victor Ng',
       author_email='vng@mozilla.com',
-      url='https://github.com/mozilla-services/django-raven-metlog',
+      url='https://github.com/mozilla-services/django-raven-heka',
       license='MPLv2.0',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=['docopt', 'raven', 'metlog-raven>=0.4'],
+      install_requires=['docopt', 'raven', 'heka-raven>=0.4'],
       tests_require=tests_require,
       extras_require={'test': tests_require},
       test_suite='runtests.runtests',
