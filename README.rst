@@ -15,3 +15,16 @@ The advantage of doing so allows heka to act as a centralized client
 to route all logging messages.  This greatly simplifies testing as you
 can always just query the heka client to see what messages have been
 sent.
+
+How to run the testsuite:
+
+Due to the dependency on Django, you'll need to use the runtests.py
+script instead of just running nose.
+
+To run the tests, use ::
+
+    python runtests.py
+
+You can get a list of all command line options by using --help ::
+
+    python runtests.py --help

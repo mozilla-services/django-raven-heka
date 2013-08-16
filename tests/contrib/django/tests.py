@@ -87,23 +87,12 @@ class DjangoHekaTransport(TestCase):
             * This is the actual heka client instance
         """
 
-        """
-        'sender': {
-            'class': 'heka.senders.UdpSender',
-            'host': '192.168.20.2',
-            'port': 5565,
-        },
-        """
         self.HEKA_CONF = {
-            'sender': {
-                'class': 'heka.senders.UdpSender',
-                'host': '192.168.20.2',
-                'port': 5565,
-            },
-            'plugins': {'raven':
-                ('heka_raven.raven_plugin:config_plugin', {'dsn':
-                    DSN})
-             },
+                'stream_class': 'heka.streams.DebugCaptureStream',
+                'plugins': {'raven':
+                    ('heka_raven.raven_plugin:config_plugin', {'dsn':
+                        DSN})
+                    },
         }
 
         self.SENTRY_CLIENT = 'djangoraven.heka.HekaDjangoClient'
@@ -121,7 +110,7 @@ class DjangoHekaTransport(TestCase):
 
             self.raven.capture('Message', message='foo')
 
-            msgs = settings.HEKA.sender.msgs
+            msgs = [m[8:] for m in settings.HEKA.sender.stream.msgs]
 
             self.assertEquals(len(msgs), 1)
             event = self.raven.decode(json.loads(msgs[0])['payload'])
@@ -157,7 +146,7 @@ class DjangoHekaTransport(TestCase):
             else:
                 self.fail('Expected an exception.')
 
-            msgs = settings.HEKA.sender.msgs
+            msgs = [m[8:] for m in settings.HEKA.sender.stream.msgs]
 
             self.assertEquals(len(msgs), 1)
 
