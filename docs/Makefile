@@ -77,17 +77,17 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/DjangoRavenMetlogintegration.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/DjangoRavenHekaintegration.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/DjangoRavenMetlogintegration.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/DjangoRavenHekaintegration.qhc"
 
 devhelp:
 	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/DjangoRavenMetlogintegration"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/DjangoRavenMetlogintegration"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/DjangoRavenHekaintegration"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/DjangoRavenHekaintegration"
 	@echo "# devhelp"
 
 epub:

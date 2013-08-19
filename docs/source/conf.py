@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Django Raven Metlog integration documentation build configuration file, created by
+# Django Raven Heka integration documentation build configuration file, created by
 # sphinx-quickstart on Wed Nov 28 10:59:52 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Django Raven Metlog integration'
+project = u'Django Raven Heka integration'
 copyright = u'2012, Victor Ng'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -48,7 +48,7 @@ copyright = u'2012, Victor Ng'
 # built documents.
 #
 # The short X.Y version.
-version = '0.2'
+version = '0.3'
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -165,7 +165,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'DjangoRavenMetlogintegrationdoc'
+htmlhelp_basename = 'DjangoRavenHekaintegrationdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -184,7 +184,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'DjangoRavenMetlogintegration.tex', u'Django Raven Metlog integration Documentation',
+  ('index', 'DjangoRavenHekaintegration.tex', u'Django Raven Heka integration Documentation',
    u'Victor Ng', 'manual'),
 ]
 
@@ -214,7 +214,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'djangoravenmetlogintegration', u'Django Raven Metlog integration Documentation',
+    ('index', 'djangoravenhekaintegration', u'Django Raven Heka integration Documentation',
      [u'Victor Ng'], 1)
 ]
 
@@ -228,8 +228,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'DjangoRavenMetlogintegration', u'Django Raven Metlog integration Documentation', u'Victor Ng',
-   'DjangoRavenMetlogintegration', 'One line description of project.', 'Miscellaneous'),
+  ('index', 'DjangoRavenHekaintegration', u'Django Raven Heka integration Documentation', u'Victor Ng',
+   'DjangoRavenHekaintegration', 'One line description of project.', 'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

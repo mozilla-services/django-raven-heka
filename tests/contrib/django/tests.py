@@ -60,7 +60,7 @@ class Settings(object):
                 setattr(settings, k, v)
 
 
-class DjangoMetlogTransport(TestCase):
+class DjangoHekaTransport(TestCase):
     ## Fixture setup/teardown
     urls = 'tests.contrib.django.urls'
 
@@ -77,43 +77,32 @@ class DjangoMetlogTransport(TestCase):
               This is the control point that all messages are going
               to get routed through
 
-              For metlog integration, this *must* be
-              'raven_metlog.djangometlog.MetlogDjangoClient'
+              For heka integration, this *must* be
+              'raven_heka.djangoheka.HekaDjangoClient'
 
-        settings.METLOG_CONF :
-            * configuration for the metlog client instance
+        settings.HEKA_CONF :
+            * configuration for the heka client instance
 
-        settings.METLOG :
-            * This is the actual metlog client instance
+        settings.HEKA :
+            * This is the actual heka client instance
         """
 
-        """
-        'sender': {
-            'class': 'metlog.senders.UdpSender',
-            'host': '192.168.20.2',
-            'port': 5565,
-        },
-        """
-        self.METLOG_CONF = {
-            'sender': {
-                'class': 'metlog.senders.UdpSender',
-                'host': '192.168.20.2',
-                'port': 5565,
-            },
-            'plugins': {'raven':
-                ('metlog_raven.raven_plugin:config_plugin', {'dsn':
-                    DSN})
-             },
+        self.HEKA_CONF = {
+                'stream_class': 'heka.streams.DebugCaptureStream',
+                'plugins': {'raven':
+                    ('heka_raven.raven_plugin:config_plugin', {'dsn':
+                        DSN})
+                    },
         }
 
-        self.SENTRY_CLIENT = 'djangoraven.metlog.MetlogDjangoClient'
+        self.SENTRY_CLIENT = 'djangoraven.heka.HekaDjangoClient'
 
-        from metlog.config import client_from_dict_config
-        self.METLOG = client_from_dict_config(self.METLOG_CONF)
+        from heka.config import client_from_dict_config
+        self.HEKA = client_from_dict_config(self.HEKA_CONF)
 
     def test_basic(self):
-        with Settings(METLOG_CONF=self.METLOG_CONF,
-                      METLOG=self.METLOG,
+        with Settings(HEKA_CONF=self.HEKA_CONF,
+                      HEKA=self.HEKA,
                       SENTRY_CLIENT=self.SENTRY_CLIENT,
                       SENTRY_DSN=DSN):
 
@@ -121,7 +110,7 @@ class DjangoMetlogTransport(TestCase):
 
             self.raven.capture('Message', message='foo')
 
-            msgs = settings.METLOG.sender.msgs
+            msgs = [m[8:] for m in settings.HEKA.sender.stream.msgs]
 
             self.assertEquals(len(msgs), 1)
             event = self.raven.decode(json.loads(msgs[0])['payload'])
@@ -143,8 +132,8 @@ class DjangoMetlogTransport(TestCase):
             self.assertTrue(isinstance(event['timestamp'], basestring))
 
     def test_signal_integration(self):
-        with Settings(METLOG_CONF=self.METLOG_CONF,
-                      METLOG=self.METLOG,
+        with Settings(HEKA_CONF=self.HEKA_CONF,
+                      HEKA=self.HEKA,
                       SENTRY_CLIENT=self.SENTRY_CLIENT,
                       SENTRY_DSN=DSN):
 
@@ -157,7 +146,7 @@ class DjangoMetlogTransport(TestCase):
             else:
                 self.fail('Expected an exception.')
 
-            msgs = settings.METLOG.sender.msgs
+            msgs = [m[8:] for m in settings.HEKA.sender.stream.msgs]
 
             self.assertEquals(len(msgs), 1)
 
