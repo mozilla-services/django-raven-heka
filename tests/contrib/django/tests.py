@@ -9,10 +9,9 @@ from django.conf import settings
 from django.core.signals import got_request_exception
 from django.test import TestCase
 
+from heka.tests.helpers import decode_message
 from raven.contrib.django import DjangoClient
 from raven.contrib.django.models import get_client
-
-import json
 
 settings.SENTRY_CLIENT = 'tests.contrib.django.tests.TempStoreClient'
 DSN='udp://1007818f46e44c2f9a03b684dcff87b4:6391e66ef7194b67bd41c23851c7b03a@192.168.20.2:9001/2'
@@ -110,10 +109,13 @@ class DjangoHekaTransport(TestCase):
 
             self.raven.capture('Message', message='foo')
 
-            msgs = [m[8:] for m in settings.HEKA.sender.stream.msgs]
+            msgs = []
+            for mdata in settings.HEKA.stream.msgs:
+                h, m = decode_message(mdata)
+                msgs.append(m)
 
             self.assertEquals(len(msgs), 1)
-            event = self.raven.decode(json.loads(msgs[0])['payload'])
+            event = self.raven.decode(msgs[0].payload)
 
             self.assertTrue('sentry.interfaces.Message' in event)
             message = event['sentry.interfaces.Message']
@@ -146,11 +148,14 @@ class DjangoHekaTransport(TestCase):
             else:
                 self.fail('Expected an exception.')
 
-            msgs = [m[8:] for m in settings.HEKA.sender.stream.msgs]
+            msgs = []
+            for mdata in settings.HEKA.stream.msgs:
+                h, m = decode_message(mdata)
+                msgs.append(m)
 
             self.assertEquals(len(msgs), 1)
 
-            event = self.raven.decode(json.loads(msgs[0])['payload'])
+            event = self.raven.decode(msgs[0].payload)
             self.assertTrue('sentry.interfaces.Exception' in event)
             exc = event['sentry.interfaces.Exception']
             self.assertEquals(exc['type'], 'ValueError')
