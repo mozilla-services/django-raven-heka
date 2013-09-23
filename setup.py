@@ -32,7 +32,6 @@ tests_require = [
     'heka-py',
     'mock',
     'pep8',
-    'raven',
 ]
 
 setup(name='django-raven-heka',
@@ -48,7 +47,6 @@ setup(name='django-raven-heka',
       include_package_data=True,
       zip_safe=False,
       install_requires=['docopt', 
-                'raven', 
                 'heka-py-raven>=0.6'],
       tests_require=tests_require,
       extras_require={'test': tests_require},
