@@ -162,7 +162,8 @@ class DjangoHekaTransport(TestCase):
             self.assertEquals(exc['value'], u"invalid literal for int() with base 10: 'hello'")
             self.assertEquals(event['level'], logging.ERROR)
             self.assertEquals(event['message'], u"ValueError: invalid literal for int() with base 10: 'hello'")
-            self.assertEquals(event['culprit'], 'tests.contrib.django.tests.test_signal_integration')
+            self.assertEquals(event['culprit'],
+                    'tests.contrib.django.tests in test_signal_integration')
 
             # The project_id must be extracted from the SENTRY_DSN
             # option
