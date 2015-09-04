@@ -1,3 +1,7 @@
+DEPRECATED: This software is no longer being maintained. There are many ways
+to get data into Heka, including just POSTing a JSON payload into an
+HttpListenInput.
+
 =================
 django-raven-heka
 =================
